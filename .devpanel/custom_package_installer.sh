@@ -11,3 +11,10 @@
 
 sudo apt-get update
 sudo apt-get install -y nano
+
+if [[ -n "$DP_VSCODE_EXTENSIONS" ]]; then
+    IFS=','
+    for value in $DP_VSCODE_EXTENSIONS; do
+        code-server --install-extension $value --user-data-dir=$APP_ROOT/.vscode
+    done
+fi
