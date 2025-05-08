@@ -28,7 +28,9 @@ if [[ $(mysql -h$DB_HOST -P$DB_PORT -u$DB_USER -p$DB_PASSWORD $DB_NAME -e "show 
 fi
 
 if [[ -n "$DB_SYNC_VOL" ]]; then
-  echo  'Sync volume...'
-  sudo chown -R 1000:1000 /var/www/build 
-  rsync -av --delete --delete-excluded $APP_ROOT/ /var/www/build
+  if [[ ! -f "/var/www/build/.devpanel/init-container.sh" ]]; then
+    echo  'Sync volume...'
+    sudo chown -R 1000:1000 /var/www/build 
+    rsync -av --delete --delete-excluded $APP_ROOT/ /var/www/build
+  fi
 fi
