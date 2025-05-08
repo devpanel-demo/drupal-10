@@ -15,7 +15,7 @@
 # For GNU Affero General Public License see <https://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
-  #== Import database
+#== Import database
 if [[ $(mysql -h$DB_HOST -P$DB_PORT -u$DB_USER -p$DB_PASSWORD $DB_NAME -e "show tables;") == '' ]]; then
   if [[ -f "$APP_ROOT/.devpanel/dumps/db.sql.tgz" ]]; then
     echo  'Extract mysql files ...'
@@ -25,4 +25,10 @@ if [[ $(mysql -h$DB_HOST -P$DB_PORT -u$DB_USER -p$DB_PASSWORD $DB_NAME -e "show 
     rm /tmp/$SQLFILE
     sudo rm -rf $APP_ROOT/.devpanel/dumps/db.sql.tgz
   fi
+fi
+
+if [[ -n "$DB_SYNC_VOL" ]]; then
+  echo  'Sync volume...'
+  sudo chown -R 1000:1000 /var/www/build 
+  rsync -av --delete --delete-excluded $APP_ROOT/ /var/www/build
 fi
